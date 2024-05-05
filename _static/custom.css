@@ -1,7 +1,3 @@
-a {
-    color: #cc0000; /* Dark red color */
-}
-
-a:hover {
-    color: #ff6347; /* Tomato red on hover */
+p {
+    text-align: justify;
 }
