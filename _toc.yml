@@ -1,0 +1,22 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+  - file: slides
+  - file: Coursework
+  - file: Lecture-1/intro
+    sections:
+    - file: Lecture-1/introduction.ipynb
+    - file: Lecture-1/exact-sampling.ipynb
+    - file: Lecture-1/rejection-sampling.ipynb
+    - file: Lecture-1/importance-sampling.ipynb
+  - file: Lecture-2/intro
+    sections:
+    - file: Lecture-2/metropolis-hastings.ipynb
+    - file: Lecture-2/unadjusted-langevin-algorithm.ipynb
+  - file: Lecture-3/intro
+    sections:
+    - file: Lecture-3/kalman-filter.ipynb
+    - file: Lecture-3/particle-filter.ipynb
