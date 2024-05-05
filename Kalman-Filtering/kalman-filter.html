@@ -68,7 +68,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="canonical" href="https://akyildiz.me/teaching/stsim/Kalman-Filtering/kalman-filter.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Lecture 3" href="../Lecture-3/intro.html" />
+    <link rel="next" title="The particle filter" href="../Particle-Filtering/intro.html" />
     <link rel="prev" title="An Introduction to Bayesian Filtering: Theory and Methods" href="../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -171,9 +171,7 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Kalman filter</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../Lecture-3/intro.html">Lecture 3</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Lecture-3/kalman-filter.html">The Kalman filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Lecture-3/particle-filter.html">The particle filter</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Particle-Filtering/intro.html">The particle filter</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -363,17 +361,19 @@ document.write(`
     <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">Q</span><span class="p">)</span>
     <span class="n">y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">R</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;true trajectory&#39;</span><span class="p">,</span> <span class="s1">&#39;measurements&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x111d04910&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1227fdb20&gt;
 </pre></div>
 </div>
-<img alt="../_images/74f9198ac0ad4080c56f7776f9f49354fea599b194bf6213664956c56f6cc4bd.png" src="../_images/74f9198ac0ad4080c56f7776f9f49354fea599b194bf6213664956c56f6cc4bd.png" />
+<img alt="../_images/1d7674bcec6ba0caa5b29d08c9751475a7c79f40861a1fc8dddc5e925534de01.png" src="../_images/1d7674bcec6ba0caa5b29d08c9751475a7c79f40861a1fc8dddc5e925534de01.png" />
 </div>
 </div>
 <p>Next, as explained in the slides, we write our Kalman filtering functions.</p>
@@ -411,44 +411,17 @@ document.write(`
 
     <span class="n">mu</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">kalman_update</span><span class="p">(</span><span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">H</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mu</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;g-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mu</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;true trajectory&#39;</span><span class="p">,</span> <span class="s1">&#39;measurements&#39;</span><span class="p">,</span> <span class="s1">&#39;kalman-filter&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9c9b00daa9eed7d3fbf0426875fd333ad02d59f55cc38a8784a0c80cd0638265.png" src="../_images/9c9b00daa9eed7d3fbf0426875fd333ad02d59f55cc38a8784a0c80cd0638265.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Kalman smoother</span>
-
-<span class="n">mu_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
-<span class="n">V_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
-
-<span class="n">mu_smooth</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">V_smooth</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">mu_smooth</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu_smooth</span><span class="p">[:,</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">V_smooth</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V_smooth</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mu</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;g-&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu_smooth</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mu_smooth</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;m-&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;true trajectory&#39;</span><span class="p">,</span> <span class="s1">&#39;measurements&#39;</span><span class="p">,</span> <span class="s1">&#39;kalman-filter&#39;</span><span class="p">,</span> <span class="s1">&#39;kalman-smoother&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/068bec2a8a7e869a5cded00aa0676fc392bc1c837cb168166812c85d27d7ddd6.png" src="../_images/068bec2a8a7e869a5cded00aa0676fc392bc1c837cb168166812c85d27d7ddd6.png" />
+<img alt="../_images/ce11d6b98351d20bd386169dad1b8b3ca59c0a12a9ff584c3881c0fd838fc90e.png" src="../_images/ce11d6b98351d20bd386169dad1b8b3ca59c0a12a9ff584c3881c0fd838fc90e.png" />
 </div>
 </div>
 </section>
@@ -493,11 +466,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="../Lecture-3/intro.html"
+       href="../Particle-Filtering/intro.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Lecture 3</p>
+        <p class="prev-next-title">The particle filter</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
