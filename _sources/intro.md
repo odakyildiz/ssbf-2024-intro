@@ -1,4 +1,6 @@
-# Advanced Computational Methods in Stats
+## An Introduction to Bayesian Filtering: Theory and Methods
+
+### Tutorial at Summer School on Bayesian Filtering 2024
 
 This is a companion webpage to the LTCC course in Advanced Computational Methods in Statistics.
 
