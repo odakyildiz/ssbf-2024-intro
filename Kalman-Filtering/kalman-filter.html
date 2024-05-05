@@ -64,12 +64,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'Lecture-3/kalman-filter';</script>
-    <link rel="canonical" href="https://akyildiz.me/teaching/stsim/Lecture-3/kalman-filter.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Kalman-Filtering/kalman-filter';</script>
+    <link rel="canonical" href="https://akyildiz.me/teaching/stsim/Kalman-Filtering/kalman-filter.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The particle filter" href="particle-filter.html" />
-    <link rel="prev" title="Lecture 3" href="intro.html" />
+    <link rel="next" title="Introduction" href="../Lecture-1/introduction.html" />
+    <link rel="prev" title="Slides" href="../slides.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -171,14 +171,14 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../slides.html">Slides</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../Kalman-Filtering/kalman-filter.html">The Kalman filter</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">The Kalman filter</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../Lecture-1/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Lecture-1/importance-sampling.html">Importance Sampling</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="intro.html">Lecture 3</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Kalman filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="particle-filter.html">The particle filter</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Lecture-3/intro.html">Lecture 3</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Lecture-3/kalman-filter.html">The Kalman filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Lecture-3/particle-filter.html">The particle filter</a></li>
 </ul>
 </li>
 </ul>
@@ -235,7 +235,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/Lecture-3/kalman-filter.ipynb" target="_blank"
+      <li><a href="../_sources/Kalman-Filtering/kalman-filter.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -332,6 +332,7 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="the-kalman-filter">
 <h1>The Kalman filter<a class="headerlink" href="#the-kalman-filter" title="Permalink to this heading">#</a></h1>
 <p>The model below is taken from the <a class="reference external" href="https://link.springer.com/content/pdf/10.1007/s11222-019-09884-y.pdf">paper</a>, Section 5.3 with simplifications.</p>
+<p>We consider the model in the paper, and the first part of this code concerns with data generation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -347,10 +348,6 @@ document.write(`
 
 <span class="n">k</span> <span class="o">=</span> <span class="mf">0.04</span>
 
-<span class="c1"># A is a matrix 4x4 matris</span>
-<span class="c1"># [I_2, kappa*I_2;</span>
-<span class="c1"># 0_2, 0.99 * I_2]</span>
-
 <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([</span>
     <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">k</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span>
     <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="mf">0.99</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
@@ -363,15 +360,13 @@ document.write(`
 
 <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
-
-<span class="n">R</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">R</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
 
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-    <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">Q</span><span class="p">)</span>
-    <span class="n">y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">R</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">Q</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">R</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
@@ -380,16 +375,31 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[1. 0. 0. 0.]
- [0. 1. 0. 0.]]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x123d70910&gt;
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11e107a60&gt;
+<img alt="../_images/74f9198ac0ad4080c56f7776f9f49354fea599b194bf6213664956c56f6cc4bd.png" src="../_images/74f9198ac0ad4080c56f7776f9f49354fea599b194bf6213664956c56f6cc4bd.png" />
+</div>
+</div>
+<p>Next, as explained in the slides, we write our Kalman filtering functions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">kalman_predict</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
+    <span class="n">mu_pred</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">mu</span>
+    <span class="n">V_pred</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">V</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">Q</span>
+    <span class="k">return</span> <span class="n">mu_pred</span><span class="p">,</span> <span class="n">V_pred</span>
+
+<span class="k">def</span> <span class="nf">kalman_update</span><span class="p">(</span><span class="n">mu_pred</span><span class="p">,</span> <span class="n">V_pred</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">V_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">R</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">V_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_pred</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">H</span> <span class="o">@</span> <span class="n">mu_pred</span><span class="p">)</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">V_pred</span> <span class="o">-</span> <span class="n">K</span> <span class="o">@</span> <span class="n">H</span> <span class="o">@</span> <span class="n">V_pred</span>
+    <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">V</span>
 </pre></div>
 </div>
-<img alt="../_images/dc887482c82cac5fb947cdb02a673a9443570037f09e014956fb9cfe5910df92.png" src="../_images/dc887482c82cac5fb947cdb02a673a9443570037f09e014956fb9cfe5910df92.png" />
 </div>
 </div>
+<p>Next, we will run our filter - and compare the filter estimates to the ground truth signal.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
@@ -402,14 +412,9 @@ document.write(`
 <span class="n">V_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-    <span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu</span><span class="p">[:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">Q</span>
+    <span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">kalman_predict</span><span class="p">(</span><span class="n">mu</span><span class="p">[:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">A</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
 
-    <span class="n">S</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">])</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">R</span>
-    <span class="n">K</span> <span class="o">=</span> <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">))</span>
-
-    <span class="n">mu</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">K</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="n">H</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]))</span>
-    <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="n">K</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">])</span>
+    <span class="n">mu</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">kalman_update</span><span class="p">(</span><span class="n">mu_pred</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">V_pred</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">H</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
@@ -420,7 +425,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a534ec7714331140864cff9855c3ee879554c353310bb51cef3b08384ed07ec2.png" src="../_images/a534ec7714331140864cff9855c3ee879554c353310bb51cef3b08384ed07ec2.png" />
+<img alt="../_images/9c9b00daa9eed7d3fbf0426875fd333ad02d59f55cc38a8784a0c80cd0638265.png" src="../_images/9c9b00daa9eed7d3fbf0426875fd333ad02d59f55cc38a8784a0c80cd0638265.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -448,8 +453,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/32fd9f61bb4c9f1325c8297bd67d00756d01e9b72786286630dca8feda9608cd.png" src="../_images/32fd9f61bb4c9f1325c8297bd67d00756d01e9b72786286630dca8feda9608cd.png" />
+<img alt="../_images/068bec2a8a7e869a5cded00aa0676fc392bc1c837cb168166812c85d27d7ddd6.png" src="../_images/068bec2a8a7e869a5cded00aa0676fc392bc1c837cb168166812c85d27d7ddd6.png" />
 </div>
+</div>
+<div class="toctree-wrapper compound">
 </div>
 </section>
 
@@ -466,7 +473,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./Lecture-3"
+            path: "./Kalman-Filtering"
         },
         predefinedOutput: true
     }
@@ -484,20 +491,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="intro.html"
+       href="../slides.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Lecture 3</p>
+        <p class="prev-next-title">Slides</p>
       </div>
     </a>
     <a class="right-next"
-       href="particle-filter.html"
+       href="../Lecture-1/introduction.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The particle filter</p>
+        <p class="prev-next-title">Introduction</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
