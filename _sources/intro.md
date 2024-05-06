@@ -11,6 +11,7 @@ We will try to be self-contained within this lecture, but some useful material i
 Slides can be found below.
 
 [Link to slides](https://akyildiz.me/teaching/ssbf/main.pdf)
+
 [Proofs](https://akyildiz.me/teaching/ssbf/proofs.pdf)
 
 ## Table of Contents
