@@ -14,6 +14,16 @@ Slides can be found below.
 
 [Proofs](https://akyildiz.me/teaching/ssbf/proofs.pdf)
 
+## Videos
+
+### Lecture 1
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lmQWiWFGiL4?si=JHkoT53OOTVcDrEA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+### Lecture 2
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jqsJyLBTW6Y?si=8jizRsGFuLtSP0RS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Table of Contents
 
 ```{tableofcontents}
